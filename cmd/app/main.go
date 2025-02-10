@@ -5,14 +5,18 @@ import (
 	"log/slog"
 	"os"
 
-	"url-shortener/internal/config"
-
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"github.com/joho/godotenv"
+
+	"url-shortener/internal/config"
+	mwLogger "url-shortener/internal/http-server/middleware/logger"
+	"url-shortener/internal/lib/logger/sl"
+	"url-shortener/internal/storage/sqlite"
 )
 
 const (
-	envPath = "/Users/madw3y/petprojects/url-stortener/.env"
-
+	envPath  = "../../.env"
 	envLocal = "local"
 	envProd  = "prod"
 	envDev   = "dev"
@@ -30,11 +34,21 @@ func main() {
 	log.Info("starting service", slog.String("env", cfg.Env))
 	log.Debug("debug messages are enabled")
 
-	// TODO: init logger: slog
+	storage, err := sqlite.New(cfg.StoragePath)
+	if err != nil {
+		log.Error("failed to init storage", sl.Err(err))
+		os.Exit(1)
+	}
 
-	// TODO: init storage: postgresql
+	_ = storage
 
-	// TODO: init router: chi, chi render
+	router := chi.NewRouter()
+
+	router.Use(middleware.RequestID)
+	router.Use(middleware.Logger)
+	router.Use(mwLogger.New(log))
+	router.Use(middleware.Recoverer)
+	router.Use(middleware.URLFormat)
 
 	// TODO: run server
 }
