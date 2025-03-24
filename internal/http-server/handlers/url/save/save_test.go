@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
 	"url-shortener/internal/http-server/handlers/url/save"
 	"url-shortener/internal/http-server/handlers/url/save/mocks"
 	"url-shortener/internal/lib/logger/handlers/slogdiscard"
@@ -16,7 +17,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestSaveHadler(t *testing.T) {
+func TestSaveHandler(t *testing.T) {
 	cases := []struct {
 		name      string
 		alias     string

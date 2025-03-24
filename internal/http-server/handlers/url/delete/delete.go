@@ -3,12 +3,13 @@ package delete
 import (
 	"log/slog"
 	"net/http"
-	"url-shortener/internal/lib/api/response"
-	"url-shortener/internal/lib/logger/sl"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/render"
+
+	"url-shortener/internal/lib/api/response"
+	"url-shortener/internal/lib/logger/sl"
 )
 
 type URLDeleter interface {
